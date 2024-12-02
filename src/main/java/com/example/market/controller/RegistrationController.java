@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class RegistrationController {
@@ -21,8 +24,13 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User user) {
-        userService.registerNewUser(user);
-        return "redirect:/login";
+    public String registerUser(User user, @RequestParam(required = false) List<String> roleNames,Model model) {
+        try {
+            userService.registerNewUser(user, roleNames);
+            return "redirect:/login";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        }
     }
 }
