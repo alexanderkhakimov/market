@@ -22,14 +22,14 @@ public class AdminInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (!userRepository.findByUsername("admin").isPresent()) {
+        if (userRepository.findByUsername("admin").isEmpty()) {
             Role adminRole = roleRepository.findByRoleName("ROLE_ADMIN")
                     .orElseThrow(() -> new RuntimeException("Роль не найдена: ROLE_ADMIN"));
             User adminUser = new User();
             adminUser.setUsername("admin");
             adminUser.setPassword(passwordEncoder.encode("admin"));
             adminUser.setEmail("admin@gmail.com");
-            adminUser.setRoles(Collections.singleton(adminRole));
+            adminUser.setRole(adminRole);
             userRepository.save(adminUser);
 
         }

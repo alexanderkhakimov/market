@@ -16,6 +16,6 @@ public class Role {
    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ROLE_USER'")
    private String roleName;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 }

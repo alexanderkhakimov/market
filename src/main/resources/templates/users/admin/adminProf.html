@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Профиль</title>
+</head>
+<body>
+<h1>Профиль пользователя в профиль Администратора</h1>
+<p>Добро пожаловать, <span th:text="${username}"></span>!</p>
+<button onclick="toggleUsersList()">Показать список пользователей</button>
+
+<div id="user-list" style="display: none;">
+  <h2>Список пользователей</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Имя пользователя</th>
+      <th>Email</th>
+      <th>Роль</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.id}"></td>
+      <td th:text="${user.username}"></td>
+      <td th:text="${user.email}"></td>
+      <td th:text="${user.role.roleName}"></td>
+      <td>
+        <form th:action="@{/users/admin/deleteUser/{userId}(userId=${user.id})}" method="post">
+          <button type="submit">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  function toggleUsersList() {
+    var userList = document.getElementById('user-list');
+    if (userList.style.display === 'none' || userList.style.display === '') {
+      userList.style.display = 'block';
+    } else {
+      userList.style.display = 'none';
+    }
+  }
+</script>
+<p><a href="/login">Выйти</a> </p>
+</body>
+</html>

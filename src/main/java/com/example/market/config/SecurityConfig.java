@@ -21,15 +21,15 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/register", "/login").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**").hasRole("USER")
+                                .requestMatchers("/","/register", "/login").permitAll()
+                                .requestMatchers("/users/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/users/user/**").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/profile")
+                                .defaultSuccessUrl("/")
                                 .permitAll()
                 )
                 .logout(logout ->
