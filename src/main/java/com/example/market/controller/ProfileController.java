@@ -28,7 +28,7 @@ public class ProfileController {
                 return "redirect:/users/admin/adminProf";
             case "ROLE_USER":
                 System.out.println("user");
-                return "redirect:/users/user/profile";
+                return "/users/user/profile";
         }
 
         return "/profile";

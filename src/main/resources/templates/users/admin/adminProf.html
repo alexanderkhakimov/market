@@ -2,11 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Профиль</title>
+  <style>
+    .add-product-button, .toggle-users-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 <h1>Профиль пользователя в профиль Администратора</h1>
 <p>Добро пожаловать, <span th:text="${username}"></span>!</p>
-<button onclick="toggleUsersList()">Показать список пользователей</button>
+<button onclick="toggleUsersList()" class="toggle-users-button">Показать список пользователей</button>
 
 <div id="user-list" style="display: none;">
   <h2>Список пользователей</h2>
@@ -34,6 +48,7 @@
     </tbody>
   </table>
 </div>
+
 <script>
   function toggleUsersList() {
     var userList = document.getElementById('user-list');
@@ -44,6 +59,8 @@
     }
   }
 </script>
+<a th:href="@{/users/admin/addProducts}" class="add-product-button">Добавить продукты</a>
+<a th:href="@{/products}" class="add-product-button">Список продуктов</a>
 <p><a href="/login">Выйти</a> </p>
 </body>
 </html>
