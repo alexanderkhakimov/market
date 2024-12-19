@@ -1,12 +1,15 @@
 package com.example.market.service;
 
+import com.example.market.model.Account;
 import com.example.market.model.Role;
 import com.example.market.model.User;
+import com.example.market.repository.CartRepository;
 import com.example.market.repository.RoleRepository;
 import com.example.market.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CartRepository cartRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -43,27 +48,44 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
-    }
-
-    public User findByUserEmail(String email) {
-        return userRepository.findUserByEmail(email).orElse(null);
-    }
-    public String getUserRole(String username){
+    public String getUserRole(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         Role role = user.getRole();
-        if (role!=null) {
+        if (role != null) {
             return role.getRoleName();
         }
         return "ROLE_USER";
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    public void deleteUser(Long userId){
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        cartRepository.deleteByUserId(userId);
         userRepository.deleteById(userId);
+    }
+
+    public Long getUserId(String userName) {
+        return userRepository.findByUsername(userName).orElseThrow(() -> new RuntimeException("Пользователь с таким именем не существует")).getId();
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findUserById(userId).orElseThrow(() -> new RuntimeException("Пользователь с таким id не существует"));
+    }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public Double getUserAccountBalance(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        Account account = user.getAccount();
+        if (account != null) {
+            return account.getBalance();
+        }
+        return 0.0;
     }
 
 
